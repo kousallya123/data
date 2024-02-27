@@ -74,7 +74,6 @@ function App() {
 
   return (
     <div className="containe min-h-[100vh] mx-auto p-4" style={{ backgroundImage: `url(${Bg})`,backgroundRepeat:'no-repeat',   backgroundSize: 'cover'}}>
-    {/* Dropdown for rows per page */}
     <div className="flex justify-between mb-4 items-center">
       <text className='text-lg text-black-400  '>Data from firebase</text>
       <div  className='flex justify-between mb-4 items-center'>
@@ -107,37 +106,33 @@ function App() {
           ))}
         </select>
         </div>
+        
     </div>
-
-    <table className="w-full border-collapse border border-gray-800">
-      <thead>
-        <tr className="bg-gray-200 text-left ">
-          <th className="p-2 border-r border-gray-800">Name</th>
-          <th className="p-2 border-r border-gray-800">Age</th>
-          <th className="p-2 border-r border-gray-800">City</th>
-          <th className="p-2 border-r border-gray-800">Position</th>
+    {sortedEmployees.length!==0 ? (
+      <table className="w-full border-collapse border border-gray-800">
+    <thead>
+      <tr className="bg-gray-200 text-left ">
+        <th className="p-2 border-r border-gray-800">Name</th>
+        <th className="p-2 border-r border-gray-800">Age</th>
+        <th className="p-2 border-r border-gray-800">City</th>
+        <th className="p-2 border-r border-gray-800">Position</th>
+      </tr>
+    </thead>
+    <tbody>
+      {sortedEmployees.slice(0, rowsPerPage).map((employee, index) => (
+        <tr key={index} className="border border-gray-800">
+          <td className="p-2 border-r border-gray-800">{employee.name}</td>
+          <td className="p-2 border-r border-gray-800">{employee.age}</td>
+          <td className="p-2 border-r border-gray-800">{employee.city}</td>
+          <td className="p-2 border-r border-gray-800">{employee.position}</td>
         </tr>
-      </thead>{console.log(sortedEmployees)}
-      <tbody>
-      {sortedEmployees.length===0 ? (
-  sortedEmployees.slice(0, rowsPerPage).map((employee, index) => (
-    <tr key={index} className="border border-gray-800">
-      <td className="p-2 border-r border-gray-800">{employee.name}</td>
-      <td className="p-2 border-r border-gray-800">{employee.age}</td>
-      <td className="p-2 border-r border-gray-800">{employee.city}</td>
-      <td className="p-2 border-r border-gray-800">{employee.position}</td>
-    </tr>
-  ))
+      ))}
+    </tbody>
+  </table>
 ) : (
-  <div>
-    {View}
-  </div>
-)} 
-
-      </tbody>
-    </table>
-  </div>
+ <div>{View} No data for {searchTerm}</div>
+)}
+</div>
   )
 }
-
 export default App
