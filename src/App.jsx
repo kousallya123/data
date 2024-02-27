@@ -130,7 +130,7 @@ function App() {
     </tbody>
   </table>
 ) : (
- <div>{View} No data for {searchTerm}</div>
+ <div> No data for {searchTerm}</div>
 )}
 </div>
   )
