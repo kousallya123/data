@@ -1,7 +1,11 @@
 import { useState,useEffect } from 'react'
 import './App.css'
-import { get, ref, onValue } from 'firebase/database';
+import { get, ref } from 'firebase/database';
 import database from './firebase'
+import Bg from './assets/bg.avif'
+import { useLottie } from "lottie-react";
+import noDataAnimation from './assets/no-data.json'
+
 
 function App() {
   const [employees, setEmployees] = useState([]);
@@ -15,10 +19,8 @@ function App() {
       try {
         const dataRef = ref(database, '/');
         const snapshot = await get(dataRef);
-        console.log(snapshot,'snap');
         if (snapshot.exists()) {
           const data = Object.values(snapshot.val());
-          console.log(data,'data');
           setEmployees(data);
         }
       } catch (error) {
@@ -62,8 +64,16 @@ function App() {
     : [];
 
   const sortOptions = ['name', 'city', 'age', 'position'];
+
+  const options = {
+    animationData: noDataAnimation,
+    loop: true
+  };
+
+  const { View } = useLottie(options);
+
   return (
-    <div className="container mx-auto p-4">
+    <div className="containe min-h-[100vh] mx-auto p-4" style={{ backgroundImage: `url(${Bg})`,backgroundRepeat:'no-repeat',   backgroundSize: 'cover'}}>
     {/* Dropdown for rows per page */}
     <div className="flex justify-between mb-4 items-center">
       <text className='text-lg text-black-400  '>Data from firebase</text>
@@ -107,17 +117,23 @@ function App() {
           <th className="p-2 border-r border-gray-800">City</th>
           <th className="p-2 border-r border-gray-800">Position</th>
         </tr>
-      </thead>
+      </thead>{console.log(sortedEmployees)}
       <tbody>
-        {sortedEmployees &&
-         sortedEmployees.slice(0,rowsPerPage).map((employee, index) => (
-            <tr key={index} className="border border-gray-800">
-              <td className="p-2 border-r border-gray-800">{employee.name}</td>
-              <td className="p-2 border-r border-gray-800">{employee.age}</td>
-              <td className="p-2 border-r border-gray-800">{employee.city}</td>
-              <td className="p-2 border-r border-gray-800">{employee.position}</td>
-            </tr>
-          ))}
+      {sortedEmployees.length===0 ? (
+  sortedEmployees.slice(0, rowsPerPage).map((employee, index) => (
+    <tr key={index} className="border border-gray-800">
+      <td className="p-2 border-r border-gray-800">{employee.name}</td>
+      <td className="p-2 border-r border-gray-800">{employee.age}</td>
+      <td className="p-2 border-r border-gray-800">{employee.city}</td>
+      <td className="p-2 border-r border-gray-800">{employee.position}</td>
+    </tr>
+  ))
+) : (
+  <div>
+    {View}
+  </div>
+)} 
+
       </tbody>
     </table>
   </div>
